@@ -4,6 +4,128 @@ Essential Mermaid diagrams for DefVault system architecture and data flows.
 
 ---
 
+## 0. Work-Flow
+
+```mermaid
+graph TD
+
+%% ================================
+%% ENTRY LAYER
+%% ================================
+
+A["👤 User Access"] --> B["🌐 DefVault Web Platform<br/>React + Vite"]
+B --> C{"🎯 Select Account Type"}
+
+C -->|"Enterprise Admin"| ENT_DASH["🏢 Enterprise Dashboard"]
+C -->|"Personal User"| PER_DASH["👤 Personal Dashboard"]
+
+%% ================================
+%% ================================
+%% 🏢 ENTERPRISE MODULE (B2B)
+%% ================================
+%% ================================
+
+subgraph ENTERPRISE_MODULE["🏢 Enterprise Module (B2B)"]
+
+ENT_DASH --> E1["🎨 Visual Authentication<br/>Canvas Grid"]
+E1 -->|"POST /canvas/generate"| E2["Canvas Service"]
+E2 -->|"Store Grid Metadata"| E_CACHE["⚡ Redis Session Store"]
+E2 -->|"Return Grid"| ENT_DASH
+
+ENT_DASH -->|"User Selection"| E3["POST /canvas/verify"]
+E3 -->|"Validate Selection"| E4["Grid Validator"]
+E4 -->|"Check Honey Trap"| E5{"Valid?"}
+
+E5 -->|"Yes"| E6["🔐 Issue JWT"]
+E5 -->|"No"| E_BLOCK["❌ Block + Alert"]
+
+E6 -->|"Sign RS256"| E7["JWT Service"]
+E7 -->|"Store Session Metadata"| E_CACHE
+E7 -->|"Return Token"| ENT_DASH
+
+ENT_DASH -->|"View Logs"| E_LOGS["📊 Enterprise Audit Logs"]
+
+end
+
+%% ================================
+%% ================================
+%% 👤 PERSONAL MODULE (B2C)
+%% ================================
+%% ================================
+
+subgraph PERSONAL_MODULE["👤 Personal Module (B2C)"]
+
+PER_DASH -->|"Connect Gmail"| P1["🔐 OAuth 2.0<br/>gmail.modify Scope"]
+P1 -->|"Store Tokens Securely"| P_DB["📧 Gmail Tokens<br/>Supabase"]
+
+P_DB -->|"Trigger Worker"| P2["📬 Gmail Monitoring Worker"]
+
+P2 -->|"Fetch New Emails"| P3["Extract Metadata<br/>Sender, Subject, Body"]
+
+P3 -->|"Extract URLs"| P4["🔍 URL Threat Engine"]
+P3 -->|"Extract Attachments"| P5["🦠 VirusTotal Scan"]
+
+P4 --> CORE_THREAT
+P5 --> CORE_THREAT
+
+CORE_THREAT -->|"Calculate Risk Score"| P6["🎯 Risk Evaluator"]
+
+P6 -->|"Low/Medium"| P7["⚠️ Warn User"]
+P6 -->|"High Risk"| P8["🚨 quarantineThreat(messageId)"]
+
+P8 -->|"users.messages.modify"| P9["Move to SPAM"]
+
+P7 --> PER_DASH
+P9 --> PER_DASH
+
+PER_DASH -->|"View Threat History"| P_HISTORY["📊 Email Threat History"]
+
+end
+
+%% ================================
+%% ================================
+%% 🧠 SHARED CORE ENGINE
+%% ================================
+%% ================================
+
+subgraph CORE_ENGINE["🧠 Shared Core Threat Intelligence Engine"]
+
+CORE_THREAT["Threat Engine<br/>Parallel Checks"]
+
+CORE_THREAT --> C1["Google Safe Browsing"]
+CORE_THREAT --> C2["Domain Age + Reputation"]
+CORE_THREAT --> C3["Entropy Analysis"]
+CORE_THREAT --> C4["ML Phishing Model"]
+CORE_THREAT --> C5["SSL Validation"]
+CORE_THREAT --> C6["VirusTotal API"]
+
+end
+
+%% ================================
+%% DATA LAYER
+%% ================================
+
+subgraph DATA_LAYER["🗄 Supabase (PostgreSQL)"]
+
+DB_USERS["Users Table"]
+DB_ENTERPRISE["Enterprise Clients"]
+DB_AUTH_LOGS["Enterprise Auth Logs"]
+DB_EMAIL_THREATS["Personal Email Threats"]
+DB_AUDIT["Global Audit Logs"]
+
+end
+
+%% ================================
+%% CONNECTIONS
+%% ================================
+
+ENT_DASH --> DB_AUTH_LOGS
+PER_DASH --> DB_EMAIL_THREATS
+CORE_THREAT --> DB_AUDIT
+```
+
+---
+---
 ## 1. System Architecture Overview
 
 ```mermaid
