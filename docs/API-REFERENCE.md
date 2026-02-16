@@ -23,7 +23,7 @@ DefVault REST API with Enterprise (B2B) and Personal (B2C) modules sharing a cor
 
 ---
 
-## 🔐 Authentication Methods
+## Authentication Methods
 
 | Module | Type | Flow |
 |--------|------|------|
@@ -34,9 +34,9 @@ DefVault REST API with Enterprise (B2B) and Personal (B2C) modules sharing a cor
 
 ---
 
-## 📋 ENTERPRISE MODULE
+## ENTERPRISE MODULE
 
-### 🔑 Authentication: `/auth`
+### Authentication: `/auth`
 
 | Endpoint | Method | Auth | Purpose |
 |----------|--------|------|---------|
@@ -573,7 +573,7 @@ Each module operates independently to prevent cascade failures:
 
 ---
 
-## 📝 Environment Variables Required
+## Environment Variables Required
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
@@ -593,7 +593,7 @@ See `.env.example` for complete configuration details.
 
 ---
 
-## 📚 Version History
+## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
