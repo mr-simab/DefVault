@@ -258,7 +258,7 @@ docker-compose up -d
 - **[MODULAR Architecture Guide](docs/MODULAR-ARCHITECTURE.md)** - Module development patterns and routing
 - **[API Reference](docs/API-REFERENCE.md)** - REST endpoint documentation for Enterprise & Personal modules
 - **[Integration Guide](docs/integration-guide.md)** - SDK examples and integration steps
-- **[Deployment Guide](docs/deployment-guide.md)** - Complete deployment instructions
+- **[Deployment Guide](docs/DEPLOYMENT-GUIDE.md)** - Complete deployment instructions
 
 ---
 
