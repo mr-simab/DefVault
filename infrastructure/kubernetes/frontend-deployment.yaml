@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: defvault-frontend
+  labels:
+    app: defvault-frontend
+    module: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: defvault-frontend
+  template:
+    metadata:
+      labels:
+        app: defvault-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: defvault-frontend:latest
+        ports:
+        - containerPort: 5173
+        env:
+        - name: VITE_API_URL
+          value: "https://api.defvault.com"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5173
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5173
+          initialDelaySeconds: 5
+          periodSeconds: 5

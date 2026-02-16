@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: defvault-core
+  labels:
+    app.kubernetes.io/name: defvault
+    app.kubernetes.io/component: core
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: defvault-enterprise
+  labels:
+    app.kubernetes.io/name: defvault
+    app.kubernetes.io/component: enterprise
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: defvault-personal
+  labels:
+    app.kubernetes.io/name: defvault
+    app.kubernetes.io/component: personal

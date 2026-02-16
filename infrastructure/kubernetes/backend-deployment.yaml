@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: defvault-backend
+  labels:
+    app: defvault-backend
+    module: core
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: defvault-backend
+  template:
+    metadata:
+      labels:
+        app: defvault-backend
+        module: core
+    spec:
+      containers:
+      - name: backend
+        image: defvault-backend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: defvault-config
+              key: db.host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: defvault-config
+              key: db.port
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: defvault-config
+              key: redis.host
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: defvault-secrets
+              key: jwt.secret
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5

@@ -1,0 +1,11 @@
+# Optional Prometheus configuration (placeholder)
+# This file was moved from the main infra to keep the repo minimal.
+# Replace with your actual Prometheus config if you want to enable monitoring.
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'defvault'
+    static_configs:
+      - targets: ['localhost:9090']

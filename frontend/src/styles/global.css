@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Watermark style used across app */
+.app-watermark {
+  position: fixed;
+  right: 2rem;
+  top: 2rem;
+  opacity: 0.06;
+  font-size: 5rem;
+  color: rgba(0, 217, 255, 0.06);
+  pointer-events: none;
+  z-index: 10;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+}
